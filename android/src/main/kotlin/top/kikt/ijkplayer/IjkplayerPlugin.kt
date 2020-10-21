@@ -102,18 +102,30 @@ class IjkplayerPlugin(private val registrar: Registrar) : MethodCallHandler {
     
     private fun setVolume(volume: Int) {
         audioManager.apply {
-            val max = getStreamMaxVolume(AudioManager.STREAM_MUSIC)
-            
-            val step = 100.toFloat() / max.toFloat()
-            
-            val current = getSystemVolume()
-            
-            val progress = current * step
-            
-            if (volume > progress) {
-                volumeDown()
-            } else if (volume < progress) {
+//            val max = getStreamMaxVolume(AudioManager.STREAM_MUSIC)
+//
+//            val step = 100.toFloat() / max.toFloat()
+//
+//            val current = getSystemVolume()
+//
+//            val progress = current * step
+//
+//            if (volume > progress) {
+//                volumeDown()
+//            } else if (volume < progress) {
+//                volumeUp()
+//            }
+
+            val max = getStreamMaxVolume(AudioManager.STREAM_MUSIC).toFloat()
+
+            val target = volume * max / 100
+
+            val current = getStreamVolume(AudioManager.STREAM_MUSIC).toFloat()
+
+            if(target > current){
                 volumeUp()
+            } else if(target < current){
+                volumeDown()
             }
         }
     }
