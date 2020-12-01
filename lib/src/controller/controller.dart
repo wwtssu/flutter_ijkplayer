@@ -256,7 +256,6 @@ class IjkMediaController
   /// [target] unit is second
   Future<void> seekTo(double target) async {
     await _plugin?.seekTo(target);
-    _ijkStatus = IjkStatus.pause;
     refreshVideoInfo();
   }
 
@@ -329,6 +328,18 @@ class IjkMediaController
     refreshVideoInfo();
     _playFinishController?.add(this);
     _ijkStatus = IjkStatus.complete;
+  }
+
+  void _onBuffering() {
+    _ijkStatus = IjkStatus.buffering;
+    isPlaying = videoInfo.isPlaying;
+    refreshVideoInfo();
+  }
+
+  void _checkBuffered() {
+    if(ijkStatus == IjkStatus.buffering) _ijkStatus = IjkStatus.buffered;
+    // isPlaying = videoInfo.isPlaying;
+    // refreshVideoInfo();
   }
 
   void _onError(int errorValueInt) async {

@@ -14,6 +14,8 @@ enum IjkStatus {
   setDatasourceFail,
   prepared,
   pause,
+  buffering,
+  buffered,
   error,
   playing,
   complete,

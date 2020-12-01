@@ -44,6 +44,12 @@ class _IJKEventChannel {
       case "rotateChanged":
         onRotateChanged(call);
         break;
+      case "onBuffering":
+        onBuffering(call);
+        break;
+      case "decodeStatusChange":
+        onDecodeStatusChange(getInfo(call));
+        break;
       case "error":
         var info = await controller.getVideoInfo();
         _onPlayFinish(info);
@@ -68,6 +74,11 @@ class _IJKEventChannel {
   }
 
   void onPlayStateChange(VideoInfo info) {
+    controller.isPlaying = info.isPlaying;
+  }
+
+  void onDecodeStatusChange(VideoInfo info) {
+    controller?._checkBuffered();
     controller.isPlaying = info.isPlaying;
   }
 
@@ -103,6 +114,10 @@ class _IJKEventChannel {
   void onRotateChanged(MethodCall call) {
     var info = getInfo(call);
     LogUtils.debug("onRotateChanged , info = $info");
+  }
+
+  void onBuffering(MethodCall call){
+    controller?._onBuffering();
   }
 
   void _onPlayError(int errorValue) {

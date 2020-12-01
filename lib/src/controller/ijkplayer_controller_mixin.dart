@@ -56,7 +56,7 @@ mixin IjkMediaControllerStreamMixin {
     if (_isDispose) return;
     this._isPlaying = value;
     _playingController?.add(value);
-    if (value == true) {
+    if (value == true && ijkStatus != IjkStatus.buffering) {
       _ijkStatus = IjkStatus.playing;
     }
   }

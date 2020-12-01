@@ -123,6 +123,14 @@
 
 - (void)loadStateDidChange:(NSNotification *)notification {
     NSLog(@"load state change, state = %lu", (unsigned long)_controller.loadState);
+    if ((self.controller.loadState & IJKMPMovieLoadStatePlaythroughOK) != 0) {
+        if (!self.controller.isPlaying) {
+        }else{
+            [channel invokeMethod:@"decodeStatusChange" arguments:[self getInfo]];
+        }
+    }else if (self.controller.loadState & IJKMPMovieLoadStateStalled){
+        [channel invokeMethod:@"onBuffering" arguments:[self getInfo]];
+    }
     [self.infoDelegate onLoadStateChange];
 }
 

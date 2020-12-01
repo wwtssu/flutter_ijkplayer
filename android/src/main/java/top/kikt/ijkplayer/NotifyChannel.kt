@@ -45,12 +45,18 @@ class NotifyChannel(val registry: PluginRegistry.Registrar, val textureId: Long,
         player.setOnInfoListener { mp, what, extra ->
             logi("onInfoListener $what, extra = $extra, isPlaying = ${player.isPlaying} ")
             when (what) {
-                IMediaPlayer.MEDIA_INFO_AUDIO_DECODED_START, IMediaPlayer.MEDIA_INFO_VIDEO_DECODED_START -> {
+//                IMediaPlayer.MEDIA_INFO_AUDIO_DECODED_START, IMediaPlayer.MEDIA_INFO_VIDEO_DECODED_START -> {
 //                    channel.invokeMethod("playStateChange", info)
-                }
+//                }
                 IMediaPlayer.MEDIA_INFO_VIDEO_ROTATION_CHANGED -> {
                     ijk.degree = extra
                     channel.invokeMethod("rotateChanged", info)
+                }
+                IMediaPlayer.MEDIA_INFO_BUFFERING_START -> {
+                    channel.invokeMethod("onBuffering", info)
+                }
+                IMediaPlayer.MEDIA_INFO_AUDIO_DECODED_START,IMediaPlayer.MEDIA_INFO_VIDEO_DECODED_START,IMediaPlayer.MEDIA_INFO_VIDEO_SEEK_RENDERING_START,IMediaPlayer.MEDIA_INFO_AUDIO_SEEK_RENDERING_START,IMediaPlayer.MEDIA_INFO_MEDIA_ACCURATE_SEEK_COMPLETE -> {
+                    channel.invokeMethod("decodeStatusChange", info)
                 }
             }
             false
